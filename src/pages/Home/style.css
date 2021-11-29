@@ -1,0 +1,30 @@
+.page-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.add-new-item {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+}
+
+/* antd override */
+.ant-layout-header,
+.ant-layout-footer {
+  color: #fff;
+  background: #7dbcea;
+}
+.ant-layout-footer {
+  line-height: 1.5;
+}
+.ant-layout-sider {
+  color: #fff;
+  line-height: 120px;
+  background: #3ba0e9;
+}
+.ant-layout-content {
+  min-height: 120px;
+  line-height: 120px;
+}
