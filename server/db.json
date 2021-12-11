@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "name": "Eggs",
+      "category": "eggs and dairy",
+      "best_by": "2021-12-20",
+      "label": null,
+      "image": null,
+      "brand": null
+    },
+    {
+      "id": 2,
+      "name": "Milk",
+      "category": "eggs and dairy",
+      "best_by": "2021-12-30",
+      "label": null,
+      "image": null,
+      "brand": null
+    }
+  ]
+}

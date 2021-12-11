@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Button, Tooltip, Layout, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { CreateModal } from '../../components/CreateModal';
+import { ManageTable } from '../../components/ManageTable';
 
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -26,6 +27,7 @@ const Home = () => {
     <Layout className="page-container">
       <Header>Use it before waste it!</Header>
       <Content>
+        <ManageTable />
         <Tooltip title="Add a New Item" className="add-new-item">
           <Button
             type="primary"
