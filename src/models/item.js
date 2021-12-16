@@ -9,7 +9,7 @@ export class Item {
     brand = null,
   }) {
     // protection
-    if (!id || !name || !category || !best_by) {
+    if (!name || !category || !best_by) {
       throw Error('Item missing required properties');
     }
     this.id = id;

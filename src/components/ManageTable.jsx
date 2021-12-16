@@ -4,7 +4,7 @@ import { Item } from '../models/item';
 import { getItems, sortItemsByField } from '../utils/http';
 import { ItemDetails } from './ItemDetails';
 
-export const ManageTable = () => {
+export const ManageTable = ({ dataVersion }) => {
   const columns = [
     {
       title: 'Name',
@@ -67,7 +67,7 @@ export const ManageTable = () => {
     setIsModalVisible(false);
   };
 
-  async function initTableData() {
+  async function fetchTableData() {
     const items = await getItems();
     setTableData(items);
   }
@@ -79,14 +79,14 @@ export const ManageTable = () => {
   }
 
   useEffect(() => {
-    initTableData();
-  }, []);
+    fetchTableData();
+  }, [dataVersion]);
 
   return (
     <>
       <Table columns={columns} dataSource={tableData} onChange={onChange} />;
       <Modal
-        title="Basic Modal"
+        title="New Item"
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
