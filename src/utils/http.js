@@ -37,6 +37,16 @@ export const sortItemsByField = async (field = 'name', order) => {
   }
 };
 
+export const createItem = async (item) => {
+  try {
+    const formattedItem = new Item(item);
+    const { data: rawData } = await axios.post(itemsUrl, formattedItem);
+    console.log(rawData);
+  } catch (e) {
+    console.error(e);
+  }
+};
+
 export const getItemById = (id) => {
   axios
     .get(`http://localhost:3001/api/items/${id}`)

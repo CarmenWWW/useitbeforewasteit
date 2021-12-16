@@ -10,6 +10,7 @@ const { Header, Footer, Sider, Content } = Layout;
 
 const Home = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [dataVersion, setDataVersion] = useState(0);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -17,6 +18,7 @@ const Home = () => {
 
   const handleOk = () => {
     setIsModalVisible(false);
+    setDataVersion(dataVersion + 1);
   };
 
   const handleCancel = () => {
@@ -27,7 +29,7 @@ const Home = () => {
     <Layout className="page-container">
       <Header>Use it before waste it!</Header>
       <Content>
-        <ManageTable />
+        <ManageTable dataVersion={dataVersion} />
         <Tooltip title="Add a New Item" className="add-new-item">
           <Button
             type="primary"
@@ -37,12 +39,13 @@ const Home = () => {
           />
         </Tooltip>
         <Modal
-          title="Basic Modal"
+          title="Create New Item"
           visible={isModalVisible}
           onOk={handleOk}
           onCancel={handleCancel}
+          footer={null}
         >
-          <CreateModal />
+          <CreateModal onFinish={handleOk} />
         </Modal>
       </Content>
     </Layout>

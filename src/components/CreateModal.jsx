@@ -1,27 +1,32 @@
 import { Form, Input, Button, Select, DatePicker } from 'antd';
+import { Item } from '../models/item';
+import { createItem } from '../utils/http';
 
+import { Categories } from './Categories';
 
-
-export const CreateModal = () => {
-  const { Option } = Select;
-
-  const onFinish = (values) => {
-    console.log('Received values of form:', values);
+export const CreateModal = ({ onFinish }) => {
+  const onSubmit = async (values) => {
+    const date = values.best_by.format('YYYY-MM-DD');
+    const item = new Item({
+      ...values,
+      best_by: date,
+    });
+    await createItem(item);
+    onFinish(values);
   };
 
-
-  const TimeRelatedForm = () => {
-    const onFinish = (fieldsValue) => {
-      // Should format date value before submit.
-      const rangeValue = fieldsValue['range-picker'];
-      const rangeTimeValue = fieldsValue['range-time-picker'];
-      const values = {
-        ...fieldsValue,
-        'date-picker': fieldsValue['date-picker'].format('YYYY-MM-DD'),
-      };
-      console.log('Received values of form: ', values);
-    };
-  };
+  // const TimeRelatedForm = () => {
+  //   const onFinish = (fieldsValue) => {
+  //     // Should format date value before submit.
+  //     const rangeValue = fieldsValue['range-picker'];
+  //     const rangeTimeValue = fieldsValue['range-time-picker'];
+  //     const values = {
+  //       ...fieldsValue,
+  //       'date-picker': fieldsValue['date-picker'].format('YYYY-MM-DD'),
+  //     };
+  //     console.log('Received values of form: ', values);
+  //   };
+  // };
 
   return (
     <Form
@@ -32,20 +37,16 @@ export const CreateModal = () => {
       wrapperCol={{
         span: 16,
       }}
-      initialValues={{
-        remember: true,
-      }}
-      onFinish={onFinish}
-
+      onFinish={onSubmit}
       autoComplete="off"
     >
       <Form.Item
         label="Name"
-        name="Name"
+        name="name"
         rules={[
           {
             required: true,
-            message: 'Please input the item name!',
+            message: 'Please input the item name.',
           },
         ]}
       >
@@ -53,36 +54,25 @@ export const CreateModal = () => {
       </Form.Item>
 
       <Form.Item
-        name="Category"
         label="Category"
+        name="category"
         rules={[
           {
             required: true,
+            message: 'Please choose the category.',
           },
         ]}
       >
-        <Select
-          placeholder="Select a category"
-          allowClear
-        >
-          <Option value="Dairy and Eggs">Dairy and Eggs</Option>
-          <Option value="Vegetables and Fruits">Vegetables and Fruits</Option>
-          <Option value="Meat and Seafood">Meat and Seafood</Option>
-          <Option value="Deli and Prepared Foods">Deli and Prepared Foods</Option>
-          <Option value="Beverages">Beverages</Option>
-          <Option value="Snacks and Candy">Snacks and Candy</Option>
-          <Option value="Frozen">Frozen</Option>
-          <Option value="Bakery">Bakery</Option>
-          <Option value="Dry Goods">Dry Goods</Option>
-          <Option value="Condiments and Sauces">Condiments and Sauces</Option>
-          <Option value="other">Other</Option>
+        <Select placeholder="Select a category" allowClear>
+          {Categories}
         </Select>
       </Form.Item>
 
-
       <Form.Item
         noStyle
-        shouldUpdate={(prevValues, currentValues) => prevValues.Category !== currentValues.Category}
+        shouldUpdate={(prevValues, currentValues) =>
+          prevValues.Category !== currentValues.Category
+        }
       >
         {({ getFieldValue }) =>
           getFieldValue('Category') === 'other' ? (
@@ -101,54 +91,26 @@ export const CreateModal = () => {
         }
       </Form.Item>
 
-      <Form.Item 
-        name="Best By"
+      <Form.Item
         label="Best by"
+        name="best_by"
         rules={[
           {
-            
             required: true,
+            message: 'Please choose the best by date.',
           },
-        ]}>
+        ]}
+      >
         <DatePicker />
       </Form.Item>
 
-      <Form.Item
-        label="Label"
-        name="Label"
-        rules={[
-          {
-            required: false,
-          },
-        ]}
-      >
+      <Form.Item label="Label" name="label">
         <Input />
       </Form.Item>
 
-      <Form.Item
-        label="Brand"
-        name="Brand"
-        rules={[
-          {
-            required: false,
-          },
-        ]}
-      >
+      <Form.Item label="Brand" name="brand">
         <Input />
       </Form.Item>
-
-      <Form.Item
-        label="Operations"
-        name="Operations"
-        rules={[
-          {
-            required: false,
-          },
-        ]}
-      >
-        <Input/>
-      </Form.Item>
-
 
       <Form.Item
         wrapperCol={{
