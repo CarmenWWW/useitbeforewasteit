@@ -86,7 +86,7 @@ export const ManageTable = () => {
     <>
       <Table columns={columns} dataSource={tableData} onChange={onChange} />;
       <Modal
-        title="Basic Modal"
+        title="New Item"
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
