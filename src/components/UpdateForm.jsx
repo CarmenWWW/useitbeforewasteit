@@ -1,5 +1,6 @@
 import { Form, Input, Button, Select, DatePicker } from 'antd';
 import moment from 'moment';
+import { useEffect } from 'react/cjs/react.development';
 import { Item } from '../models/item';
 import { updateItem } from '../utils/http';
 import { Categories } from './Categories';
@@ -15,8 +16,18 @@ export const UpdateForm = ({ item, onFinish }) => {
     onFinish(values);
   };
 
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    form.setFieldsValue({
+      ...item,
+      best_by: moment(item.best_by, 'YYYY-MM-DD'),
+    });
+  }, [form, item]);
+
   return (
     <Form
+      form={form}
       name="Update Item"
       labelCol={{
         span: 8,
