@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button, Table, Modal } from 'antd';
 import { Item } from '../models/item';
 import { getItems, sortItemsByField } from '../utils/http';
-import { ItemDetails } from './ItemDetails';
+import { UpdateForm } from './UpdateForm';
 
 export const ManageTable = ({ dataVersion }) => {
   const columns = [
@@ -38,7 +38,7 @@ export const ManageTable = ({ dataVersion }) => {
       render: (text, row, index) => {
         return (
           <>
-            <Button type="primary" onClick={() => showModal()}>
+            <Button type="primary" onClick={() => showModal(row)}>
               Update
             </Button>
             &nbsp;
@@ -52,18 +52,21 @@ export const ManageTable = ({ dataVersion }) => {
   ];
 
   const [tableData, setTableData] = useState([]);
-
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [updatingItem, setUpdatingItem] = useState(null);
 
-  const showModal = () => {
+  const showModal = (item) => {
+    setUpdatingItem(new Item(item));
     setIsModalVisible(true);
   };
 
   const handleOk = () => {
     setIsModalVisible(false);
+    fetchTableData();
   };
 
   const handleCancel = () => {
+    setUpdatingItem(null);
     setIsModalVisible(false);
   };
 
@@ -86,12 +89,15 @@ export const ManageTable = ({ dataVersion }) => {
     <>
       <Table columns={columns} dataSource={tableData} onChange={onChange} />;
       <Modal
-        title="New Item"
+        title="Update Item"
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
+        footer={null}
       >
-        <ItemDetails />
+        {isModalVisible ? (
+          <UpdateForm item={updatingItem} onFinish={handleOk} />
+        ) : null}
       </Modal>
     </>
   );

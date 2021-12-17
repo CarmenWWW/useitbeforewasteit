@@ -1,41 +1,43 @@
 import { Form, Input, Button, Select, DatePicker } from 'antd';
+import moment from 'moment';
+import { useEffect } from 'react/cjs/react.development';
 import { Item } from '../models/item';
-import { createItem } from '../utils/http';
-
+import { updateItem } from '../utils/http';
 import { Categories } from './Categories';
 
-export const CreateModal = ({ onFinish }) => {
+export const UpdateForm = ({ item, onFinish }) => {
   const onSubmit = async (values) => {
-    const date = values.best_by.format('YYYY-MM-DD');
-    const item = new Item({
+    const newItem = new Item({
       ...values,
-      best_by: date,
+      id: item.id,
+      best_by: values.best_by.format('YYYY-MM-DD'),
     });
-    await createItem(item);
+    await updateItem(newItem);
     onFinish(values);
   };
 
-  // const TimeRelatedForm = () => {
-  //   const onFinish = (fieldsValue) => {
-  //     // Should format date value before submit.
-  //     const rangeValue = fieldsValue['range-picker'];
-  //     const rangeTimeValue = fieldsValue['range-time-picker'];
-  //     const values = {
-  //       ...fieldsValue,
-  //       'date-picker': fieldsValue['date-picker'].format('YYYY-MM-DD'),
-  //     };
-  //     console.log('Received values of form: ', values);
-  //   };
-  // };
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    form.setFieldsValue({
+      ...item,
+      best_by: moment(item.best_by, 'YYYY-MM-DD'),
+    });
+  }, [form, item]);
 
   return (
     <Form
-      name="New Item"
+      form={form}
+      name="Update Item"
       labelCol={{
         span: 8,
       }}
       wrapperCol={{
         span: 16,
+      }}
+      initialValues={{
+        ...item,
+        best_by: moment(item.best_by, 'YYYY-MM-DD'),
       }}
       onFinish={onSubmit}
       autoComplete="off"
@@ -101,7 +103,7 @@ export const CreateModal = ({ onFinish }) => {
           },
         ]}
       >
-        <DatePicker />
+        <DatePicker format="YYYY-MM-DD" />
       </Form.Item>
 
       <Form.Item label="Label" name="label">
@@ -119,7 +121,7 @@ export const CreateModal = ({ onFinish }) => {
         }}
       >
         <Button type="primary" htmlType="submit">
-          Submit
+          Update
         </Button>
       </Form.Item>
     </Form>

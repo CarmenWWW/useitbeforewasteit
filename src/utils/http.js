@@ -40,8 +40,16 @@ export const sortItemsByField = async (field = 'name', order) => {
 export const createItem = async (item) => {
   try {
     const formattedItem = new Item(item);
-    const { data: rawData } = await axios.post(itemsUrl, formattedItem);
-    console.log(rawData);
+    await axios.post(itemsUrl, formattedItem);
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const updateItem = async (item) => {
+  try {
+    const formattedItem = new Item(item);
+    await axios.put(`${itemsUrl}/${item.id}`, formattedItem);
   } catch (e) {
     console.error(e);
   }

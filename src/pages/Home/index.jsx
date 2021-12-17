@@ -3,7 +3,7 @@ import './style.css';
 import { useState } from 'react';
 import { Button, Tooltip, Layout, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { CreateModal } from '../../components/CreateModal';
+import { CreateForm } from '../../components/CreateForm';
 import { ManageTable } from '../../components/ManageTable';
 
 const { Header, Footer, Sider, Content } = Layout;
@@ -45,7 +45,7 @@ const Home = () => {
           onCancel={handleCancel}
           footer={null}
         >
-          <CreateModal onFinish={handleOk} />
+          <CreateForm onFinish={handleOk} />
         </Modal>
       </Content>
     </Layout>
