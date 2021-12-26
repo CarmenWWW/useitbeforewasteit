@@ -3,6 +3,7 @@ import { Button, Table, Modal } from 'antd';
 import { Item } from '../models/item';
 import { getItems, sortItemsByField } from '../utils/http';
 import { UpdateForm } from './UpdateForm';
+import { DeleteForm } from './DeleteForm';
 
 export const ManageTable = ({ dataVersion }) => {
   const columns = [
@@ -20,6 +21,7 @@ export const ManageTable = ({ dataVersion }) => {
       title: 'Best By',
       dataIndex: 'best_by',
       sorter: (a, b) => a.best_by - b.best_by,
+      render: (_, item) => {},
     },
     {
       title: 'Label',
@@ -38,11 +40,15 @@ export const ManageTable = ({ dataVersion }) => {
       render: (text, row, index) => {
         return (
           <>
-            <Button type="primary" onClick={() => showModal(row)}>
+            <Button type="primary" onClick={() => showUpdatingModal(row)}>
               Update
             </Button>
             &nbsp;
-            <Button type="primary" danger onClick={() => showModal()}>
+            <Button
+              type="primary"
+              danger
+              onClick={() => showDeletingModal(row)}
+            >
               Delete
             </Button>
           </>
@@ -52,22 +58,39 @@ export const ManageTable = ({ dataVersion }) => {
   ];
 
   const [tableData, setTableData] = useState([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isUpdatingModalVisible, setIsUpdatingModalVisible] = useState(false);
   const [updatingItem, setUpdatingItem] = useState(null);
+  const [isDeletingModalVisible, setIsDeletingModalVisible] = useState(false);
+  const [deletingItem, setDeletingItem] = useState(null);
 
-  const showModal = (item) => {
+  const showUpdatingModal = (item) => {
     setUpdatingItem(new Item(item));
-    setIsModalVisible(true);
+    setIsUpdatingModalVisible(true);
   };
 
-  const handleOk = () => {
-    setIsModalVisible(false);
+  const handleUpdatingOk = () => {
+    setIsUpdatingModalVisible(false);
     fetchTableData();
   };
 
-  const handleCancel = () => {
+  const handleUpdatingCancel = () => {
     setUpdatingItem(null);
-    setIsModalVisible(false);
+    setIsUpdatingModalVisible(false);
+  };
+
+  const showDeletingModal = (item) => {
+    setDeletingItem(new Item(item));
+    setIsDeletingModalVisible(true);
+  };
+
+  const handleDeletingOk = () => {
+    setIsDeletingModalVisible(false);
+    fetchTableData();
+  };
+
+  const handleDeletingCancel = () => {
+    setDeletingItem(null);
+    setIsDeletingModalVisible(false);
   };
 
   async function fetchTableData() {
@@ -90,13 +113,24 @@ export const ManageTable = ({ dataVersion }) => {
       <Table columns={columns} dataSource={tableData} onChange={onChange} />;
       <Modal
         title="Update Item"
-        visible={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
+        visible={isUpdatingModalVisible}
+        onOk={handleUpdatingOk}
+        onCancel={handleUpdatingCancel}
         footer={null}
       >
-        {isModalVisible ? (
-          <UpdateForm item={updatingItem} onFinish={handleOk} />
+        {isUpdatingModalVisible ? (
+          <UpdateForm item={updatingItem} onFinish={handleUpdatingOk} />
+        ) : null}
+      </Modal>
+      <Modal
+        title="Delete Item"
+        visible={isDeletingModalVisible}
+        onOk={handleDeletingOk}
+        onCancel={handleDeletingCancel}
+        footer={null}
+      >
+        {isDeletingModalVisible ? (
+          <DeleteForm item={deletingItem} onFinish={handleDeletingOk} />
         ) : null}
       </Modal>
     </>

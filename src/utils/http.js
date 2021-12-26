@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import { Item } from '../models/item';
 
+// TODO: replace API settings in json-server with real rest-api
 const itemsUrl = 'http://localhost:3001/api/items';
 
 // antd: 'ascend', 'descend' => json-server: 'asc', 'desc'
@@ -50,6 +51,14 @@ export const updateItem = async (item) => {
   try {
     const formattedItem = new Item(item);
     await axios.put(`${itemsUrl}/${item.id}`, formattedItem);
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const deleteItem = async (item) => {
+  try {
+    await axios.delete(`${itemsUrl}/${item.id}`);
   } catch (e) {
     console.error(e);
   }
