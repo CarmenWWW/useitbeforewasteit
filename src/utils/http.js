@@ -11,6 +11,17 @@ const orderMap = {
   descend: 'desc',
 };
 
+export const getItemsByFoodAPI = async (searchString) => {
+  try {
+    // Try to replace searchString with `apple` and see what happened
+    const foodAPI = `https://api.nal.usda.gov/fdc/v1/foods/search?query=${searchString}&pageSize=20&api_key=ggFFpeOCoi18xuT9bDRR4dQWDbOiqVi5LkwySwUJ`;
+    const { data: rawData } = await axios.get(foodAPI);
+    // TODO: clean data: extract description, brand name, or even food category
+  } catch (e) {
+    console.error(e);
+  }
+};
+
 export const getItems = async () => {
   try {
     const { data: rawData } = await axios.get(itemsUrl);

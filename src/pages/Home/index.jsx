@@ -25,9 +25,14 @@ const Home = () => {
     setIsModalVisible(false);
   };
 
+  const onClick = () => {};
+
   return (
     <Layout className="page-container">
-      <Header>Use it before waste it!</Header>
+      <Header>
+        Use it before waste it!{' '}
+        <Button onClick={showModal}>Advanced Search</Button>
+      </Header>
       <Content>
         <ManageTable dataVersion={dataVersion} />
         <Tooltip title="Add a New Item" className="add-new-item">
@@ -40,6 +45,15 @@ const Home = () => {
         </Tooltip>
         <Modal
           title="Create New Item"
+          visible={isModalVisible}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          footer={null}
+        >
+          <CreateForm onFinish={handleOk} />
+        </Modal>
+        <Modal
+          title="Advanced Search"
           visible={isModalVisible}
           onOk={handleOk}
           onCancel={handleCancel}

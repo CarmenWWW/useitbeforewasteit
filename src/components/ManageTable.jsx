@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Button, Table, Modal } from 'antd';
+import { Button, Table, Modal, Tag } from 'antd';
+import moment from 'moment';
 import { Item } from '../models/item';
 import { getItems, sortItemsByField } from '../utils/http';
 import { UpdateForm } from './UpdateForm';
@@ -21,11 +22,32 @@ export const ManageTable = ({ dataVersion }) => {
       title: 'Best By',
       dataIndex: 'best_by',
       sorter: (a, b) => a.best_by - b.best_by,
-      render: (_, item) => {},
+    },
+    {
+      title: 'Expired',
+      render: (_, item) => {
+        // TODO: normal: green, expired in 3 days: yellow, expired: red
+        const msPerDay = 24 * 3600 * 1000;
+        let tagColor = 'green';
+        const diff = moment(item.best_by, 'YYYY-MM-DD') - moment.now();
+        if (diff < 0) {
+          tagColor = 'red';
+        } else if (diff / msPerDay < 3) {
+          tagColor = 'orange';
+        }
+        return (
+          <Tag color={tagColor}>
+            {moment(item.best_by, 'YYYY-MM-DD').fromNow()}
+          </Tag>
+        );
+      },
     },
     {
       title: 'Label',
       dataIndex: 'label',
+      render: (_, item) => {
+        return item.label ? <Tag color="blue">{item.label}</Tag> : null;
+      },
     },
     {
       title: 'Image',
