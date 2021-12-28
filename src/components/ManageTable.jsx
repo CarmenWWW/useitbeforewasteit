@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Button, Table, Modal, Tag } from 'antd';
+import { BulbTwoTone } from '@ant-design/icons';
 import moment from 'moment';
 import { Item } from '../models/item';
 import { getItems, sortItemsByField } from '../utils/http';
 import { UpdateForm } from './UpdateForm';
 import { DeleteForm } from './DeleteForm';
+import { Recommendation } from './Recommendation';
 
 export const ManageTable = ({ dataVersion }) => {
   const columns = [
@@ -62,10 +64,13 @@ export const ManageTable = ({ dataVersion }) => {
       render: (text, row, index) => {
         return (
           <>
+            <BulbTwoTone
+              twoToneColor="#ffa500"
+              onClick={() => showRecommendationModal(row)}
+            />{' '}
             <Button type="primary" onClick={() => showUpdatingModal(row)}>
               Update
-            </Button>
-            &nbsp;
+            </Button>{' '}
             <Button
               type="primary"
               danger
@@ -84,6 +89,9 @@ export const ManageTable = ({ dataVersion }) => {
   const [updatingItem, setUpdatingItem] = useState(null);
   const [isDeletingModalVisible, setIsDeletingModalVisible] = useState(false);
   const [deletingItem, setDeletingItem] = useState(null);
+  const [isRecommendationModalVisible, setIsRecommendationModalVisible] =
+    useState(false);
+  const [recommendationItem, setRecommendationItem] = useState(null);
 
   const showUpdatingModal = (item) => {
     setUpdatingItem(new Item(item));
@@ -113,6 +121,21 @@ export const ManageTable = ({ dataVersion }) => {
   const handleDeletingCancel = () => {
     setDeletingItem(null);
     setIsDeletingModalVisible(false);
+  };
+
+  const showRecommendationModal = (item) => {
+    setRecommendationItem(item);
+    setIsRecommendationModalVisible(true);
+  };
+
+  const handleRecommendationOk = () => {
+    setRecommendationItem(null);
+    setIsRecommendationModalVisible(false);
+  };
+
+  const handleRecommendationCancel = () => {
+    setRecommendationItem(null);
+    setIsRecommendationModalVisible(false);
   };
 
   async function fetchTableData() {
@@ -153,6 +176,17 @@ export const ManageTable = ({ dataVersion }) => {
       >
         {isDeletingModalVisible ? (
           <DeleteForm item={deletingItem} onFinish={handleDeletingOk} />
+        ) : null}
+      </Modal>
+      <Modal
+        title="Recommend Recipe"
+        visible={isRecommendationModalVisible}
+        onOk={handleRecommendationOk}
+        onCancel={handleRecommendationCancel}
+        footer={null}
+      >
+        {isRecommendationModalVisible ? (
+          <Recommendation item={recommendationItem} />
         ) : null}
       </Modal>
     </>

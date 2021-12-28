@@ -64,7 +64,6 @@ export const AdvancedSearch = ({ onFinish }) => {
 
   return (
     <>
-      {/* TODO: search using USDA Food API */}
       <Search
         placeholder="input search text"
         allowClear
