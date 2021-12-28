@@ -4,34 +4,57 @@ import { useState } from 'react';
 import { Button, Tooltip, Layout, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { CreateForm } from '../../components/CreateForm';
+import { AdvancedSearch } from '../../components/AdvancedSearch';
 import { ManageTable } from '../../components/ManageTable';
 
-const { Header, Footer, Sider, Content } = Layout;
+const { Header, Content } = Layout;
 
 const Home = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [dataVersion, setDataVersion] = useState(0);
 
-  const showModal = () => {
-    setIsModalVisible(true);
+  const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
+
+  const showCreateModal = () => {
+    setIsCreateModalVisible(true);
   };
 
-  const handleOk = () => {
-    setIsModalVisible(false);
+  const handleCreateOk = () => {
+    setIsCreateModalVisible(false);
     setDataVersion(dataVersion + 1);
   };
 
-  const handleCancel = () => {
-    setIsModalVisible(false);
+  const handleCreateCancel = () => {
+    setIsCreateModalVisible(false);
   };
 
-  const onClick = () => {};
+  const [isSearchModalVisible, setIsSearchModalVisible] = useState(false);
+
+  const showSearchModal = () => {
+    setIsSearchModalVisible(true);
+  };
+
+  const handleSearchOk = () => {
+    setIsSearchModalVisible(false);
+    setDataVersion(dataVersion + 1);
+  };
+
+  const handleSearchCancel = () => {
+    setIsSearchModalVisible(false);
+  };
 
   return (
     <Layout className="page-container">
-      <Header>
-        Use it before waste it!{' '}
-        <Button onClick={showModal}>Advanced Search</Button>
+      <Header
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        <span>Use it before waste it! </span>
+        <Button type="primary" onClick={showSearchModal}>
+          Advanced Search
+        </Button>
       </Header>
       <Content>
         <ManageTable dataVersion={dataVersion} />
@@ -40,26 +63,26 @@ const Home = () => {
             type="primary"
             shape="circle"
             icon={<PlusOutlined />}
-            onClick={showModal}
+            onClick={showCreateModal}
           />
         </Tooltip>
         <Modal
           title="Create New Item"
-          visible={isModalVisible}
-          onOk={handleOk}
-          onCancel={handleCancel}
+          visible={isCreateModalVisible}
+          onOk={handleCreateOk}
+          onCancel={handleCreateCancel}
           footer={null}
         >
-          <CreateForm onFinish={handleOk} />
+          <CreateForm onFinish={handleCreateOk} />
         </Modal>
         <Modal
           title="Advanced Search"
-          visible={isModalVisible}
-          onOk={handleOk}
-          onCancel={handleCancel}
+          visible={isSearchModalVisible}
+          onOk={handleSearchOk}
+          onCancel={handleSearchCancel}
           footer={null}
         >
-          <CreateForm onFinish={handleOk} />
+          <AdvancedSearch onFinish={handleCreateOk} />
         </Modal>
       </Content>
     </Layout>

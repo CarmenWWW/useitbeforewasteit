@@ -3,20 +3,16 @@ Food API Doc: https://fdc.nal.usda.gov/api-spec/fdc_api.html#/FDC/getFoodsSearch
 Food API: https://api.nal.usda.gov/fdc/v1/foods/search?query={search-string}&pageSize=20&api_key=ggFFpeOCoi18xuT9bDRR4dQWDbOiqVi5LkwySwUJ
 */
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Input, Button, Table, Modal } from 'antd';
 import { Item } from '../models/item';
-import { getItems, sortItemsByField } from '../utils/http';
+import { getItemsByUsdaApi } from '../utils/http';
 import { CreateForm } from './CreateForm';
 
 const { Search } = Input;
 
-export const ManageTable = ({ dataVersion }) => {
+export const AdvancedSearch = ({ onFinish }) => {
   const columns = [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-    },
     {
       title: 'Name',
       dataIndex: 'name',
@@ -26,8 +22,12 @@ export const ManageTable = ({ dataVersion }) => {
       dataIndex: 'brand',
     },
     {
-      title: 'Operations',
-      render: (text, row, index) => {
+      title: 'Category',
+      dataIndex: 'category',
+    },
+    {
+      title: '',
+      render: (_, row) => {
         return (
           <Button type="primary" onClick={() => showCreatingModal(row)}>
             Add
@@ -47,8 +47,9 @@ export const ManageTable = ({ dataVersion }) => {
   };
 
   const handleCreatingOk = () => {
+    setCreatingItem(null);
     setIsCreatingModalVisible(false);
-    fetchTableData();
+    onFinish();
   };
 
   const handleCreatingCancel = () => {
@@ -56,22 +57,10 @@ export const ManageTable = ({ dataVersion }) => {
     setIsCreatingModalVisible(false);
   };
 
-  async function fetchTableData() {
-    const items = await getItems();
+  async function onSearch(queryString) {
+    const items = await getItemsByUsdaApi(queryString);
     setTableData(items);
   }
-
-  async function onChange(pagination, filters, sorter, extra) {
-    console.log('sorter:', sorter);
-    const items = await sortItemsByField(sorter.field, sorter.order);
-    setTableData(items);
-  }
-
-  useEffect(() => {
-    fetchTableData();
-  }, [dataVersion]);
-
-  const onSearch = () => {};
 
   return (
     <>
@@ -80,9 +69,9 @@ export const ManageTable = ({ dataVersion }) => {
         placeholder="input search text"
         allowClear
         onSearch={onSearch}
-        style={{ width: 600 }}
+        style={{ width: 400, marginBottom: 20 }}
       />
-      <Table columns={columns} dataSource={tableData} onChange={onChange} />;
+      {tableData ? <Table columns={columns} dataSource={tableData} /> : null}
       <Modal
         title="Create Item"
         visible={isCreatingModalVisible}
@@ -91,8 +80,10 @@ export const ManageTable = ({ dataVersion }) => {
         footer={null}
       >
         {isCreatingModalVisible ? (
-          // TODO: add new prop to fulfill initial values, just like UpdateForm
-          <CreateForm item={creatingItem} onFinish={handleCreatingOk} />
+          <CreateForm
+            initialValues={creatingItem}
+            onFinish={handleCreatingOk}
+          />
         ) : null}
       </Modal>
     </>

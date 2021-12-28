@@ -1,27 +1,44 @@
+import { useEffect } from 'react';
 import { Form, Input, Button, Select, DatePicker } from 'antd';
 import { Item } from '../models/item';
 import { createItem } from '../utils/http';
 import { Categories } from './Categories';
 
-export const CreateForm = ({ onFinish }) => {
+export const CreateForm = ({ initialValues, onFinish }) => {
   const onSubmit = async (values) => {
     const date = values.best_by.format('YYYY-MM-DD');
     const item = new Item({
       ...values,
+      id: null,
       best_by: date,
     });
     await createItem(item);
     onFinish(values);
   };
 
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    form.setFieldsValue({
+      ...initialValues,
+      best_by: null,
+    });
+  }, [form, initialValues]);
+
   return (
     <Form
+      form={form}
       name="Create Item"
       labelCol={{
         span: 8,
       }}
       wrapperCol={{
         span: 16,
+      }}
+      initialValues={{
+        ...initialValues,
+        id: null,
+        best_by: null,
       }}
       onFinish={onSubmit}
       autoComplete="off"

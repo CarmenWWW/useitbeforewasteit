@@ -1,4 +1,5 @@
 import axios from 'axios';
+import moment from 'moment';
 
 import { Item } from '../models/item';
 
@@ -11,11 +12,29 @@ const orderMap = {
   descend: 'desc',
 };
 
-export const getItemsByFoodAPI = async (searchString) => {
+const resultsPerQuery = 50;
+
+export const getItemsByUsdaApi = async (queryString) => {
   try {
-    // Try to replace searchString with `apple` and see what happened
-    const foodAPI = `https://api.nal.usda.gov/fdc/v1/foods/search?query=${searchString}&pageSize=20&api_key=ggFFpeOCoi18xuT9bDRR4dQWDbOiqVi5LkwySwUJ`;
-    const { data: rawData } = await axios.get(foodAPI);
+    // Try to replace queryString with `apple` and see what happened
+    const foodAPI = `https://api.nal.usda.gov/fdc/v1/foods/search?query=${queryString}&pageSize=${resultsPerQuery}&api_key=ggFFpeOCoi18xuT9bDRR4dQWDbOiqVi5LkwySwUJ`;
+    const rawData = await axios.get(foodAPI);
+    const foods = rawData?.data?.foods;
+
+    if (!foods || !foods.length) return [];
+
+    const items = foods.map(
+      (food, id) =>
+        new Item({
+          id,
+          name: food['description'],
+          brand: food['brandName'],
+          category: food['foodCategory'],
+          best_by: moment().format('YYYY-MM-DD'),
+        })
+    );
+
+    return items;
     // TODO: clean data: extract description, brand name, or even food category
   } catch (e) {
     console.error(e);
