@@ -1,11 +1,14 @@
-// server.js
+const express = require('express');
+const path = require('path');
+const server = express();
 const jsonServer = require('json-server');
-const server = jsonServer.create();
-const router = jsonServer.router('db.json');
-const middlewares = jsonServer.defaults();
 
-server.use(middlewares);
-server.use('/api', router);
-server.listen(3001, () => {
-  console.log('JSON Server is running');
+server.use(express.static(path.resolve(__dirname, '../build')));
+
+server.use('/api', jsonServer.router('db.json'));
+
+server.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../build', 'index.html'));
 });
+
+server.listen(process.env.PORT || 3000);

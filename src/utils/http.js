@@ -4,7 +4,7 @@ import moment from 'moment';
 import { Item } from '../models/item';
 
 // TODO: replace API settings in json-server with real rest-api
-const itemsUrl = 'http://localhost:3001/api/items';
+const itemsUrl = '/api/items';
 
 // antd: 'ascend', 'descend' => json-server: 'asc', 'desc'
 const orderMap = {
@@ -92,20 +92,4 @@ export const deleteItem = async (item) => {
   } catch (e) {
     console.error(e);
   }
-};
-
-export const getItemById = (id) => {
-  axios
-    .get(`http://localhost:3001/api/items/${id}`)
-    .then(function (response) {
-      // handle success
-      console.log(response);
-    })
-    .catch(function (error) {
-      // handle error
-      console.log(error);
-    })
-    .then(function () {
-      // always executed
-    });
 };
