@@ -1,6 +1,6 @@
 import { Form, Input, Button, Select, DatePicker } from 'antd';
 import moment from 'moment';
-import { useEffect } from 'react/cjs/react.development';
+import { useEffect } from 'react';
 import { Item } from '../models/item';
 import { deleteItem } from '../utils/http';
 import { Categories } from './Categories';
@@ -28,7 +28,7 @@ export const DeleteForm = ({ item, onFinish }) => {
   return (
     <Form
       form={form}
-      name="Update Item"
+      name="Delete Item"
       labelCol={{
         span: 8,
       }}
@@ -51,7 +51,6 @@ export const DeleteForm = ({ item, onFinish }) => {
             message: 'Please input the item name.',
           },
         ]}
-        dis
       >
         <Input disabled />
       </Form.Item>
