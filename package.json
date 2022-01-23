@@ -21,7 +21,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "cd server && node server.js"
+    "server": "cd server && node server.js",
+    "prod-server": "cd server && NODE_ENV=production node server.js"
   },
   "eslintConfig": {
     "extends": [

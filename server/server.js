@@ -1,14 +1,23 @@
 const express = require('express');
 const path = require('path');
-const server = express();
+const app = express();
+const cors = require('cors');
 const jsonServer = require('json-server');
 
-server.use(express.static(path.resolve(__dirname, '../build')));
+const router = jsonServer.router('db.json');
 
-server.use('/api', jsonServer.router('db.json'));
+const env = process.env.NODE_ENV || 'development';
 
-server.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../build', 'index.html'));
-});
+if (env === 'development') {
+  app.use(cors());
+  app.use('/api', router);
+  app.listen(process.env.PORT || 3001);
+} else {
+  app.use('/api', router);
+  app.use(express.static(path.resolve(__dirname, '../build')));
+  app.get('*', (_, res) => {
+    res.sendFile(path.resolve(__dirname, '../build', 'index.html'));
+  });
 
-server.listen(process.env.PORT || 3000);
+  app.listen(process.env.PORT || 3000);
+}

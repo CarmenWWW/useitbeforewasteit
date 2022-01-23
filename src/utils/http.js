@@ -3,8 +3,9 @@ import moment from 'moment';
 
 import { Item } from '../models/item';
 
-// TODO: replace API settings in json-server with real rest-api
-const itemsUrl = '/api/items';
+import { getApiUrl } from '.';
+
+const itemsUrl = getApiUrl();
 
 // antd: 'ascend', 'descend' => json-server: 'asc', 'desc'
 const orderMap = {

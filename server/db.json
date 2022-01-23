@@ -8,27 +8,7 @@
       "best_by": "2021-12-20",
       "label": "Tasty!",
       "image": null,
-      "brand": null
-    },
-    {
-      "id": 2,
-      "key": 2,
-      "name": "Milk",
-      "category": "Dairy and Eggs",
-      "best_by": "2021-12-31",
-      "label": null,
-      "image": null,
-      "brand": null
-    },
-    {
-      "id": 3,
-      "key": 3,
-      "name": "Cabbage",
-      "category": "Vegetables and Fruits",
-      "best_by": "2021-12-28",
-      "label": null,
-      "image": null,
-      "brand": null
+      "brand": ""
     },
     {
       "name": "APPLE",
